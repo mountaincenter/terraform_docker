@@ -3,8 +3,10 @@ data "tls_certificate" "github_actions" {
 }
 
 resource "aws_iam_openid_connect_provider" "github_actions" {
-  url             = "https://token.actions.githubusercontent.com"
-  client_id_list  = ["sts.amazonaws.com"]
+  url            = "https://token.actions.githubusercontent.com"
+  client_id_list = ["sts.amazonaws.com"]
+  # ref: https://qiita.com/minamijoyo/items/eac99e4b1ca0926c4310
+  # ref: https://zenn.dev/yukin01/articles/github-actions-oidc-provider-terraform
   thumbprint_list = [data.tls_certificate.github_actions.certificates[0].sha1_fingerprint]
 }
 
@@ -29,6 +31,7 @@ data "aws_iam_policy_document" "github_actions" {
     actions = [
       "sts:AssumeRoleWithWebIdentity",
     ]
+
     principals {
       type = "Federated"
       identifiers = [
@@ -36,7 +39,7 @@ data "aws_iam_policy_document" "github_actions" {
       ]
     }
     condition {
-      test     = "Stringlike"
+      test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values   = local.full_paths
     }
