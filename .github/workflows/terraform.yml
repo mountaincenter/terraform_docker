@@ -1,5 +1,7 @@
 name: terraform apply
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 on:
   push:
     branches:
@@ -20,7 +22,7 @@ jobs:
       - name: Configure AWS credentials from test account
         uses: aws-actions/configure-aws-credentials@v1.7.3
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions
           aws-region: ap-northeast-1
 
       - name: Setup Terraform
