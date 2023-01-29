@@ -7,7 +7,7 @@ resource "aws_iam_openid_connect_provider" "github_actions" {
   client_id_list = ["sts.amazonaws.com"]
   # ref: https://qiita.com/minamijoyo/items/eac99e4b1ca0926c4310
   # ref: https://zenn.dev/yukin01/articles/github-actions-oidc-provider-terraform
-  thumbprint_list = [data.tls_certificate.github_actions.certificates[0].sha1_fingerprint]
+  thumbprint_list = ["6938fd4d98bab03faadb97b34396831e3780aea1"]
 }
 
 # GitHub Actions側からはこのIAM Roleを指定する
